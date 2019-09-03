@@ -4,17 +4,18 @@
 ## makeCacheMatrix creates a special matrix and sets its atributes accordingly
 
 makeCacheMatrix <- function(x = matrix()) {
-        cInv <- NULL
-        set <- function(y) {
+        cInv <- NULL                            # Initially sets the inverse variable to null
+        set <- function(y) {                    # calling this function will reassign the object with new matrix and set the cached value to Null.
                 x <<- y
                 cInv <<- NULL
         }
-        get <- function() x
-        setInv <- function(invM) cInv <<- invM
-        getInv <- function() cInv
-        list(set = set, get = get,
+        get <- function() x                     # returns present matrix.
+        setInv <- function(invM) cInv <<- invM  # lexical scoping used to assign value by child function.
+        getInv <- function() cInv               # returns inverse matrix after cachesolve called once.
+        list(set = set, 
+             get = get,
              setInv = setInv,
-             getInv = getInv)
+             getInv = getInv)                   # function returns a list.
 }
 
 
@@ -24,15 +25,14 @@ makeCacheMatrix <- function(x = matrix()) {
 ## `cacheSolve` should retrieve the inverse from the cache.
 
 cacheSolve <- function(x, ...) {
-        invM<-x$getInv()
-        if (!is.null(invM))
+        invM<-x$getInv()                                # gets the value of Inverse matrix if it's already cached in passed object.
+        if (!is.null(invM))                             # if value is already cached, it will return the cached value.
         {
-                cat("getting cached data...")
+                message("getting cached data...")
                 return(invM)
         }
-        mtrx<-x$get()
-        invM<-solve(mtrx)
-        x$setInv(invM)
-        invM
-        ## Return a matrix that is the inverse of 'x'
+        mtrx<-x$get()                                   # get the matrix in passed object.
+        invM<-solve(mtrx)                               # calculate the inverse of matrix.
+        x$setInv(invM)                                  # set the same in given object
+        invM                                            # Return a matrix that is the inverse of 'x'
 }
